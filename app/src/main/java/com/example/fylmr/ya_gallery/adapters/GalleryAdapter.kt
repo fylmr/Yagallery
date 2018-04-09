@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.fylmr.ya_gallery.R
 import com.example.fylmr.ya_gallery.entities.Picture
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_gallery_picture.view.*
 
-class GalleryAdapter(var context: Context, var pics: MutableList<Picture>): RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+class GalleryAdapter(var context: Context, var pics: MutableList<Picture>) : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
     override fun getItemCount(): Int {
         return pics.size
     }
@@ -19,10 +21,12 @@ class GalleryAdapter(var context: Context, var pics: MutableList<Picture>): Recy
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        Picasso.with(context)
+                .load(pics[position].url)
+                .into(holder.imageView)
     }
 
-    class ViewHolder(var v: View): RecyclerView.ViewHolder(v) {
-
+    class ViewHolder(var v: View) : RecyclerView.ViewHolder(v) {
+        val imageView = v.gallery_picture_imageview
     }
 }
