@@ -55,5 +55,7 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
     override fun populateGallery(pics: MutableList<Picture>) {
         this.pics.clear()
         this.pics.addAll(pics)
+
+        this.galleryAdapter.notifyDataSetChanged()
     }
 }

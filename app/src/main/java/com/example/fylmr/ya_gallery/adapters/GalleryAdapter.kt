@@ -17,7 +17,7 @@ class GalleryAdapter(var context: Context, var pics: MutableList<Picture>) : Rec
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context)
-                .inflate(R.layout.item_gallery_picture, parent))
+                .inflate(R.layout.item_gallery_picture, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

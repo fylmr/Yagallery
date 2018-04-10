@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.example.fylmr.ya_gallery.models.VKPicsModel
 import com.example.fylmr.ya_gallery.views.GalleryView
 
 @InjectViewState
@@ -11,6 +12,8 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
     val TAG = "Gallery Presenter"
 
     var applicationContext: Context? = null
+
+    val vkPicsModel = VKPicsModel()
 
     fun start(context: Context?) {
         /*
@@ -24,6 +27,16 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
         } else {
             Log.e(TAG, "Passed application context is null")
         }
+
+        populateGallery()
+    }
+
+    private fun populateGallery() {
+        vkPicsModel.getAllCurrentUserPictures({
+            viewState.populateGallery(it)
+        }, {
+            Log.w(TAG, "Error populating gallery")
+        })
     }
 
 }
