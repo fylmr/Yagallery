@@ -42,4 +42,7 @@ dependencies {
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    // Yandex
+    implementation 'com.yandex.android:disk-restapi-sdk:1.0'
 }
