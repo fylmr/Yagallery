@@ -20,7 +20,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        VKSdk.login(this, VKScope.PHOTOS)
+        if (!VKSdk.isLoggedIn())
+            VKSdk.login(this, VKScope.PHOTOS)
+        else
+            skipToNextActvity()
 
 
     }
