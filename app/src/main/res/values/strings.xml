@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Ya-gallery</string>
     <string name="saved_gallery_spans_key">gallery_spans</string>
+    <string name="yandex_auth_title">Auth through Yandex</string>
+    <string name="yandex_auth_msg">Please log in</string>
+    <string name="yandex_auth_positive_btn">Login</string>
+    <string name="cancel">Cancel</string>
 </resources>

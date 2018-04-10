@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -43,6 +45,6 @@ dependencies {
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
-    // Yandex
-    implementation 'com.yandex.android:disk-restapi-sdk:1.0'
+    // VK
+    implementation 'com.vk:androidsdk:1.6.9'
 }
