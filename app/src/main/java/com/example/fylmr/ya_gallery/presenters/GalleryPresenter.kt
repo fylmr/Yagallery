@@ -1,9 +1,12 @@
 package com.example.fylmr.ya_gallery.presenters
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.example.fylmr.ya_gallery.activities.SinglePhotoActivity
+import com.example.fylmr.ya_gallery.entities.Picture
 import com.example.fylmr.ya_gallery.models.VKPicsModel
 import com.example.fylmr.ya_gallery.views.GalleryView
 
@@ -37,6 +40,13 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
         }, {
             Log.w(TAG, "Error populating gallery")
         })
+    }
+
+    fun openPhoto(picture: Picture) {
+        val goToFullScreenPic = Intent(applicationContext, SinglePhotoActivity::class.java)
+        goToFullScreenPic.putExtra("picture", picture)
+
+        viewState.openActivityForResult(goToFullScreenPic)
     }
 
 }

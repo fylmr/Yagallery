@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.fylmr.ya_gallery.R
 import com.example.fylmr.ya_gallery.entities.Picture
+import com.example.fylmr.ya_gallery.views.GalleryView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_gallery_picture.view.*
 
@@ -24,6 +25,8 @@ class GalleryAdapter(var context: Context, var pics: MutableList<Picture>) : Rec
         Picasso.with(context)
                 .load(pics[position].url)
                 .into(holder.imageView)
+
+        (context as GalleryView).photoClicked(pics[position])
     }
 
     class ViewHolder(var v: View) : RecyclerView.ViewHolder(v) {

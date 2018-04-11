@@ -23,12 +23,12 @@ class MainActivity : AppCompatActivity() {
         if (!VKSdk.isLoggedIn())
             VKSdk.login(this, VKScope.PHOTOS)
         else
-            skipToNextActvity()
+            skipToNextActivity()
 
 
     }
 
-    private fun skipToNextActvity() {
+    private fun skipToNextActivity() {
         val goToGalleryIntent = Intent(applicationContext, GalleryActivity::class.java)
         startActivity(goToGalleryIntent)
     }
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data,
                         object : VKCallback<VKAccessToken> {
                             override fun onResult(res: VKAccessToken) {
-                                skipToNextActvity()
+                                skipToNextActivity()
                             }
 
                             override fun onError(error: VKError) {

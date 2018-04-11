@@ -1,11 +1,13 @@
 package com.example.fylmr.ya_gallery.activities
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.example.fylmr.ya_gallery.Constants
 import com.example.fylmr.ya_gallery.R
 import com.example.fylmr.ya_gallery.adapters.GalleryAdapter
 import com.example.fylmr.ya_gallery.entities.Picture
@@ -57,5 +59,13 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         this.pics.addAll(pics)
 
         this.galleryAdapter.notifyDataSetChanged()
+    }
+
+    override fun photoClicked(picture: Picture) {
+        galleryPresenter.openPhoto(picture)
+    }
+
+    override fun openActivityForResult(intent: Intent) {
+        startActivityForResult(intent, Constants.RequestCodes.OPEN_PHOTO_FULL_SCREEN)
     }
 }

@@ -72,7 +72,7 @@ class VKPicsModel {
 
             picture.photo_id = responseItem.getLong(Constants.VKFields.ID).toString()
             picture.owner_id = responseItem.getLong(Constants.VKFields.OWNER_ID).toString()
-            picture.url = responseItem.getString(Constants.VKFields.PHOTO_130)
+            picture.url = responseItem.getString(Constants.VKFields.PHOTO_604)
 
             userPhotos.add(picture)
         }
