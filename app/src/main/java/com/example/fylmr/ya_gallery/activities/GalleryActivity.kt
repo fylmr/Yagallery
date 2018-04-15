@@ -40,7 +40,7 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         spans = sharedPref.getInt(getString(R.string.saved_gallery_spans_key), spans)
 
         // Initializing Pictures RecyclerView
-        galleryAdapter = GalleryAdapter(applicationContext, pics)
+        galleryAdapter = GalleryAdapter(this, pics)
         initializeRecyclerView()
 
         // Passing context to presenter
