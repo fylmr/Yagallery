@@ -23,4 +23,10 @@ class Constants {
             const val OPEN_PHOTO_FULL_SCREEN = 101
         }
     }
+
+    class ExtrasNames {
+        companion object {
+            const val PICTURE = "picture"
+        }
+    }
 }

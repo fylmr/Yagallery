@@ -26,7 +26,9 @@ class GalleryAdapter(var context: Context, var pics: MutableList<Picture>) : Rec
                 .load(pics[position].url)
                 .into(holder.imageView)
 
-        (context as GalleryView).photoClicked(pics[position])
+        holder.imageView.setOnClickListener {
+            (context as GalleryView).photoClicked(pics[position])
+        }
     }
 
     class ViewHolder(var v: View) : RecyclerView.ViewHolder(v) {

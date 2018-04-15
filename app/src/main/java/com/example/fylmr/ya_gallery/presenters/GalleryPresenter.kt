@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.example.fylmr.ya_gallery.Constants
 import com.example.fylmr.ya_gallery.activities.SinglePhotoActivity
 import com.example.fylmr.ya_gallery.entities.Picture
 import com.example.fylmr.ya_gallery.models.VKPicsModel
@@ -44,7 +45,7 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
 
     fun openPhoto(picture: Picture) {
         val goToFullScreenPic = Intent(applicationContext, SinglePhotoActivity::class.java)
-        goToFullScreenPic.putExtra("picture", picture)
+        goToFullScreenPic.putExtra(Constants.ExtrasNames.PICTURE, picture)
 
         viewState.openActivityForResult(goToFullScreenPic)
     }
