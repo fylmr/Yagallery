@@ -7,6 +7,7 @@ import android.os.Parcelable
 class Picture() : Parcelable {
 
     var url: String? = null
+    // todo Добавить ЮРЛ большой картинки и юрл маленькой отдельно
 
     var photo_id: String? = null
     var owner_id: String? = null

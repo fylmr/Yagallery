@@ -1,5 +1,6 @@
 package com.example.fylmr.ya_gallery.activities
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -8,6 +9,8 @@ import com.example.fylmr.ya_gallery.R
 import com.example.fylmr.ya_gallery.entities.Picture
 import com.example.fylmr.ya_gallery.presenters.SinglePhotoPresenter
 import com.example.fylmr.ya_gallery.views.SinglePhotoView
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_single_photo.*
 
 class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
 
@@ -22,5 +25,15 @@ class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
 
         val pic = intent.getParcelableExtra<Picture>(Constants.ExtrasNames.PICTURE)
         singlePhotoPresenter.handlePicFromIntent(pic)
+    }
+
+    override fun showPicture(url: String) {
+        Picasso.with(this)
+                .load(url)
+                .into(single_photo_imgview)
+    }
+
+    override fun showPicture(bmp: Bitmap) {
+        TODO()
     }
 }

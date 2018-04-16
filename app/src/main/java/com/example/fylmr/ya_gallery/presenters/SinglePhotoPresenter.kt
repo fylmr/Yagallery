@@ -33,7 +33,7 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
      *   @throws ClassCastException when context is not Activity context (application context for example)
      **/
     @Throws(NullPointerException::class, ClassCastException::class)
-    fun initContext(context: Context?) {
+    private fun initContext(context: Context?) {
 
 
         Log.d(TAG, "start()")
@@ -48,9 +48,30 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
     }
 
     fun handlePicFromIntent(pic: Picture?) {
+        try {
+            passPicToActivity(pic)
+        } catch (e: NullPointerException) {
+            Log.e(TAG, "Pic is empty")
+        }
+    }
+
+    /**
+     * Checks for common errors and passes picture to activity
+     * @throws NullPointerException when picture is null
+     */
+    @Throws(NullPointerException::class)
+    private fun passPicToActivity(pic: Picture?) {
         if (pic == null) {
             throw NullPointerException("Picture is null")
         }
+
+        if (pic.bmp != null) {
+            viewState.showPicture(pic.bmp!!)
+        } else if (pic.url != null) {
+            //todo Добавить передачу ЮРЛ большой картинки
+            viewState.showPicture(pic.url!!)
+        }
+
     }
 
 
