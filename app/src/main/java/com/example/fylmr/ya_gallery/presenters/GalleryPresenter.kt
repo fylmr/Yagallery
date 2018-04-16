@@ -36,7 +36,7 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
     }
 
     private fun populateGallery() {
-        vkPicsModel.getAllCurrentUserPictures({
+        vkPicsModel.getFirstCurrentUserPictures({
             viewState.populateGallery(it)
         }, {
             Log.w(TAG, "Error populating gallery")

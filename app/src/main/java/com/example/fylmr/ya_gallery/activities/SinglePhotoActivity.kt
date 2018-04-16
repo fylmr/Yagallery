@@ -33,6 +33,10 @@ class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
                 .into(single_photo_imgview)
     }
 
+    fun showFullPicture(url: String) {
+
+    }
+
     override fun showPicture(bmp: Bitmap) {
         TODO()
     }

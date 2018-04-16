@@ -4,6 +4,6 @@ import android.graphics.Bitmap
 import com.arellomobile.mvp.MvpView
 
 interface SinglePhotoView : MvpView {
-    fun showPicture(path: String)
+    fun showPicture(url: String)
     fun showPicture(bmp: Bitmap)
 }

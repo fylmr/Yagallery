@@ -13,8 +13,13 @@ class Constants {
         companion object {
             const val ID = "id"
             const val OWNER_ID = "owner_id"
+            const val PHOTO_75 = "photo_75"
             const val PHOTO_130 = "photo_130"
             const val PHOTO_604 = "photo_604"
+            const val PHOTO_807 = "photo_807"
+            const val PHOTO_1280 = "photo_1280"
+            const val PHOTO_2560 = "photo_2560"
+
         }
     }
 

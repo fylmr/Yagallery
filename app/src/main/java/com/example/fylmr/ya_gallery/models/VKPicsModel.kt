@@ -9,8 +9,13 @@ import com.vk.sdk.api.*
 class VKPicsModel {
     val TAG = "VKPicsModel"
 
-    fun getAllCurrentUserPictures(onFinish: (userPhotos: MutableList<Picture>) -> Unit, onError: (error: String) -> Unit) {
-        Log.v(TAG, "getAllCurrentUserPictures")
+    /**
+     * Get first 20 user pictures
+     * @param onFinish Callback returning the userPhotos mutable list
+     * @param onError Callback returning error description string
+     */
+    fun getFirstCurrentUserPictures(onFinish: (userPhotos: MutableList<Picture>) -> Unit, onError: (error: String) -> Unit) {
+        Log.v(TAG, "getFirstCurrentUserPictures")
 
         getCurrentUserPictures(null, null,
                 { userPhotos ->
@@ -21,6 +26,17 @@ class VKPicsModel {
                 })
     }
 
+    fun getHighResPictureByID(photoId: String) {
+
+    }
+
+    /**
+     * Get logged in user pictures
+     * @param count Amount of pictures to return
+     * @param offset Skip this much pictures
+     * @param onFinish Callback returning the userPhotos mutable list
+     * @param onError Callback returning error description string
+     */
     fun getCurrentUserPictures(count: Int?, offset: Int?,
                                onFinish: (userPhotos: MutableList<Picture>) -> Unit, onError: (error: String) -> Unit) {
         Log.v(TAG, "getCurrentUserPictures")
@@ -56,6 +72,10 @@ class VKPicsModel {
 
     }
 
+    /**
+     * Transforms [VKResponse] to mutable list of [Picture]s
+     * @param response VKResponse from server
+     */
     private fun responseToPhotosList(response: VKResponse): MutableList<Picture> {
         Log.v(TAG, "responseToPhotosList")
 
@@ -81,4 +101,6 @@ class VKPicsModel {
 
         return userPhotos
     }
+
+
 }
