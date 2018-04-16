@@ -27,8 +27,7 @@ class Picture() : Parcelable {
         return "URL: $url \n " +
                 "Photo ID: $photo_id \n" +
                 "Owner ID: $owner_id \n" +
-                "Album ID: $album_id \n" +
-                "Bmp can't be shown. It is "
+                "Album ID: $album_id \n"
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
