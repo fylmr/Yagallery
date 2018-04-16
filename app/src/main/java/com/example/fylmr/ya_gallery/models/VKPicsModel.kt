@@ -26,14 +26,97 @@ class VKPicsModel {
                 })
     }
 
-    fun getHighResPictureByID(photoId: String) {
+    /**
+     *This method requests only one picture with selected params and calls
+     * [onFinish] or [onError] after.
+     *
+     * The reason why these three params are passed instead of just one [Picture] instance
+     * is that the instance sometimes has [Bitmap] inside itself, which transfer may cost
+     * too much resources
+     * @param photoId is photo ID
+     * @param ownerId is photo's owner ID
+     * @param albumId is photo's album ID
+     */
+    fun getHighResPictureByID(photoId: String, ownerId: String, albumId: String,
+                              onFinish: (pic: Picture) -> Unit, onError: (error: String) -> Unit) {
+        Log.v(TAG, "getHighResPictureByID")
+
+        val picture = Picture()
+        picture.photo_id = photoId
+        picture.owner_id = ownerId
+
+        val request = VKRequest(Constants.VKMethods.PHOTOS_GET_BY_ID,
+                VKParameters.from(
+                        VKApiConst.PHOTOS, "${ownerId}_${photoId}",
+                        VKApiConst.EXTENDED, 0,
+                        VKApiConst.PHOTO_SIZES, 0
+                ))
+        Log.v(TAG, "Request: ${request}")
+
+        request.executeWithListener(object : VKRequest.VKRequestListener() {
+            override fun onComplete(response: VKResponse?) {
+                if (response != null) {
+                    Log.v(TAG, "Response: ${response.responseString}")
+
+                    val responsePhoto = responseToSingleHighResPhoto(picture, response)
+                    onFinish(responsePhoto)
+                }
+            }
+
+            override fun onError(error: VKError?) {
+                Log.e(TAG, error.toString())
+
+                onError(error.toString())
+            }
+        })
+    }
+
+    /**
+     * Transforms [VKResponse] into [Picture] with the best available picture url.
+     *
+     * @param picture [Picture] instance with some previously set fields.
+     * @param response [VKResponse] with the JSON inside.
+     */
+    private fun responseToSingleHighResPhoto(picture: Picture, response: VKResponse): Picture {
+        Log.v(TAG, "responseToSingleHighResPhoto")
+
+        val picture = picture
+
+        val responseItem = response.json
+                .getJSONArray("response")
+                .getJSONObject(0)
+
+        Log.v(TAG, "responseItem: ${responseItem.toString(4)}")
+
+        /**
+         * This try-catch loop is trying to find best resolution one-by-one
+         * until the requested resolution throws JSONException because it wasn't found.
+         *
+         * Ugly but working.
+         */
+        var currentHighResURL = ""
+        try {
+            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_75)
+            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_130)
+            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_604)
+            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_807)
+            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_1280)
+            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_2560)
+        } catch (e: org.json.JSONException) {
+            Log.i(TAG, "$currentHighResURL is the last available")
+        } finally {
+            picture.url = currentHighResURL
+        }
+
+        return picture
 
     }
 
     /**
-     * Get logged in user pictures
-     * @param count Amount of pictures to return
-     * @param offset Skip this much pictures
+     * Get logged in user pictures.
+     *
+     * @param count Amount of pictures to return. Default: 20
+     * @param offset Skip this much pictures. Default: 0
      * @param onFinish Callback returning the userPhotos mutable list
      * @param onError Callback returning error description string
      */
@@ -73,7 +156,8 @@ class VKPicsModel {
     }
 
     /**
-     * Transforms [VKResponse] to mutable list of [Picture]s
+     * Transforms [VKResponse] to mutable list of [Picture]s.
+     *
      * @param response VKResponse from server
      */
     private fun responseToPhotosList(response: VKResponse): MutableList<Picture> {
@@ -92,6 +176,7 @@ class VKPicsModel {
 
             picture.photo_id = responseItem.getLong(Constants.VKFields.ID).toString()
             picture.owner_id = responseItem.getLong(Constants.VKFields.OWNER_ID).toString()
+            picture.album_id = responseItem.getLong(Constants.VKFields.ALBUM_ID).toString()
             picture.url = responseItem.getString(Constants.VKFields.PHOTO_604)
 
             userPhotos.add(picture)

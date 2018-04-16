@@ -17,6 +17,8 @@ class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
     @InjectPresenter
     lateinit var singlePhotoPresenter: SinglePhotoPresenter
 
+    var fullPictureSet = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_photo)
@@ -31,10 +33,19 @@ class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
         Picasso.with(this)
                 .load(url)
                 .into(single_photo_imgview)
+
+        if (!fullPictureSet)
+            askFullPicture()
     }
 
-    fun showFullPicture(url: String) {
+    override fun showFullPicture(url: String) {
+        fullPictureSet = true
 
+        showPicture(url)
+    }
+
+    fun askFullPicture() {
+        singlePhotoPresenter.askFullPicture()
     }
 
     override fun showPicture(bmp: Bitmap) {

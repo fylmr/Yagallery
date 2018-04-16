@@ -11,6 +11,7 @@ class Picture() : Parcelable {
 
     var photo_id: String? = null
     var owner_id: String? = null
+    var album_id: String? = null
 
     var bmp: Bitmap? = null
 
@@ -18,9 +19,17 @@ class Picture() : Parcelable {
         url = parcel.readString()
         photo_id = parcel.readString()
         owner_id = parcel.readString()
+        album_id = parcel.readString()
         bmp = parcel.readParcelable(Bitmap::class.java.classLoader)
     }
 
+    override fun toString(): String {
+        return "URL: $url \n " +
+                "Photo ID: $photo_id \n" +
+                "Owner ID: $owner_id \n" +
+                "Album ID: $album_id \n" +
+                "Bmp can't be shown. It is "
+    }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         if (dest != null) {
@@ -28,6 +37,7 @@ class Picture() : Parcelable {
 
             dest.writeString(photo_id)
             dest.writeString(owner_id)
+            dest.writeString(album_id)
 
             dest.writeParcelable(bmp, 1)
         }

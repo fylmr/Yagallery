@@ -6,6 +6,7 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.example.fylmr.ya_gallery.entities.Picture
+import com.example.fylmr.ya_gallery.models.VKPicsModel
 import com.example.fylmr.ya_gallery.views.SinglePhotoView
 
 @InjectViewState
@@ -13,6 +14,8 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
     val TAG = "SinglePhotoPresenter"
 
     lateinit var context: Context
+
+    lateinit var pic: Picture
 
     /**
      * Starts the [SinglePhotoPresenter]
@@ -65,13 +68,37 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
             throw NullPointerException("Picture is null")
         }
 
+        this.pic = pic
+
         if (pic.bmp != null) {
             viewState.showPicture(pic.bmp!!)
         } else if (pic.url != null) {
-            //todo Добавить передачу ЮРЛ большой картинки
             viewState.showPicture(pic.url!!)
         }
 
+    }
+
+    /**
+     * Gets full size picture when the small one is finished loading
+     */
+    fun askFullPicture() {
+        Log.v(TAG, "askFullPicture()")
+
+        Log.d(TAG, pic.toString())
+
+        VKPicsModel().getHighResPictureByID(
+                pic.photo_id!!,
+                pic.owner_id!!,
+                "",
+                { pic ->
+                    viewState.showFullPicture(pic.url!!)
+
+                    this.pic = pic
+                },
+                { error ->
+                    Log.e(TAG, "getHighResPictureByID failed with error: $error")
+                }
+        )
     }
 
 
