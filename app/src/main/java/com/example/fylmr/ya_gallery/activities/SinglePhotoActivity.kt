@@ -49,6 +49,6 @@ class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
     }
 
     override fun showPicture(bmp: Bitmap) {
-        TODO()
+        single_photo_imgview.setImageBitmap(bmp)
     }
 }

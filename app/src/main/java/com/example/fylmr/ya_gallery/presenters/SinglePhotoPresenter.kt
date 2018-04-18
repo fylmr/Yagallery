@@ -71,9 +71,15 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
         this.pic = pic
 
         if (pic.bmp != null) {
+            Log.v(TAG, "Setting thorugh bmp")
+
             viewState.showPicture(pic.bmp!!)
+
         } else if (pic.url != null) {
+            Log.v(TAG, "Setting through url")
+
             viewState.showPicture(pic.url!!)
+
         }
 
     }

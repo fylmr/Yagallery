@@ -1,8 +1,12 @@
 package com.example.fylmr.ya_gallery.entities
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 class Picture() : Parcelable {
 
@@ -44,6 +48,20 @@ class Picture() : Parcelable {
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    fun makeBmp(context: Context) {
+        Picasso.with(context)
+                .load(url)
+                .into(object : Target {
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+
+                    override fun onBitmapFailed(errorDrawable: Drawable?) {}
+
+                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                        bmp = bitmap
+                    }
+                })
     }
 
     companion object CREATOR : Parcelable.Creator<Picture> {
