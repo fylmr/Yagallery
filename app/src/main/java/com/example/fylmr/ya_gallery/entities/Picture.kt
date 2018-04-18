@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
@@ -50,18 +51,53 @@ class Picture() : Parcelable {
         return 0
     }
 
-    fun makeBmp(context: Context) {
+    fun saveToCache(context: Context) {
+        Log.v("Picture", "writeToCache()")
+
+        if (bmp == null)
+            makeBmp(context) {
+                if (bmp != null)
+                    saveImageToInternalStorage(context, bmp!!)
+            }
+        else
+            saveImageToInternalStorage(context, bmp!!)
+    }
+
+    fun makeBmp(context: Context, onFinish: () -> Unit) {
+        Log.v("Picture", "makeBmp()")
+
         Picasso.with(context)
                 .load(url)
                 .into(object : Target {
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                    }
 
-                    override fun onBitmapFailed(errorDrawable: Drawable?) {}
+                    override fun onBitmapFailed(errorDrawable: Drawable?) {
+                        Log.w("Picture", "onBitmapFailed ${errorDrawable.toString()}")
+                    }
 
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                         bmp = bitmap
+                        onFinish()
                     }
                 })
+    }
+
+    private fun saveImageToInternalStorage(context: Context, image: Bitmap): Boolean {
+        Log.v("Picture", "saveImageToIntStorage")
+
+        try {
+            val fos = context.openFileOutput("${owner_id}_${photo_id}", Context.MODE_PRIVATE)
+
+            image.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            fos.close()
+
+            return true
+        } catch (e: Exception) {
+            Log.e("Picture", "saveImageToIntStorage error: ${e.message}")
+            return false
+        }
+
     }
 
     companion object CREATOR : Parcelable.Creator<Picture> {
