@@ -7,6 +7,20 @@
     android:background="@color/cardview_dark_background"
     tools:context=".activities.SinglePhotoActivity">
 
+    <ProgressBar
+        android:id="@+id/single_photo_pb"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/single_photo_imgview"
         android:layout_width="0dp"

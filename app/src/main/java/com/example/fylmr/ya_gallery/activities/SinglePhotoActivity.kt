@@ -2,6 +2,7 @@ package com.example.fylmr.ya_gallery.activities
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.fylmr.ya_gallery.Constants
@@ -9,6 +10,7 @@ import com.example.fylmr.ya_gallery.R
 import com.example.fylmr.ya_gallery.entities.Picture
 import com.example.fylmr.ya_gallery.presenters.SinglePhotoPresenter
 import com.example.fylmr.ya_gallery.views.SinglePhotoView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_single_photo.*
 
@@ -30,9 +32,16 @@ class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
     }
 
     override fun showPicture(url: String) {
+        single_photo_pb.visibility = View.VISIBLE
         Picasso.with(this)
                 .load(url)
-                .into(single_photo_imgview)
+                .into(single_photo_imgview, object : Callback {
+                    override fun onSuccess() {
+                        single_photo_pb.visibility = View.GONE
+                    }
+
+                    override fun onError() {}
+                })
 
         if (!fullPictureSet)
             askFullPicture()
