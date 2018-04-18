@@ -88,25 +88,16 @@ class VKPicsModel {
 
         Log.v(TAG, "responseItem: ${responseItem.toString(4)}")
 
-        /**
-         * This try-catch loop is trying to find best resolution one-by-one
-         * until the requested resolution throws JSONException because it wasn't found.
-         *
-         * Ugly but working.
-         */
+        // Looking for the largest available picture size
         var currentHighResURL = ""
-        try {
-            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_75)
-            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_130)
-            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_604)
-            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_807)
-            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_1280)
-            currentHighResURL = responseItem.getString(Constants.VKFields.PHOTO_2560)
-        } catch (e: org.json.JSONException) {
-            Log.i(TAG, "$currentHighResURL is the last available")
-        } finally {
-            picture.url = currentHighResURL
+        for (size in Constants.VKFields.PHOTO_SIZES.reversed()) {
+            if (responseItem.has(size)) {
+                currentHighResURL = responseItem.getString(size)
+                break
+            }
         }
+        picture.url = currentHighResURL
+
 
         return picture
 
