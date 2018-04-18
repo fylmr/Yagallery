@@ -11,6 +11,7 @@ import com.vk.sdk.VKCallback
 import com.vk.sdk.VKScope
 import com.vk.sdk.VKSdk
 import com.vk.sdk.api.VKError
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,10 +21,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (!VKSdk.isLoggedIn())
-            VKSdk.login(this, VKScope.PHOTOS)
-        else
+        if (!VKSdk.isLoggedIn()) {
+            login_vk_btn.setOnClickListener {
+                VKSdk.login(this, VKScope.PHOTOS)
+            }
+        } else {
             skipToNextActivity()
+        }
 
 
     }
