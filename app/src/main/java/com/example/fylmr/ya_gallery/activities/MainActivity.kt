@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun skipToNextActivity() {
         val goToGalleryIntent = Intent(applicationContext, GalleryActivity::class.java)
-        goToGalleryIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        goToGalleryIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(goToGalleryIntent)
     }
 
