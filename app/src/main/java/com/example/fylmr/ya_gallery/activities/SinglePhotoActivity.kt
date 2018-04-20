@@ -2,6 +2,7 @@ package com.example.fylmr.ya_gallery.activities
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -10,11 +11,10 @@ import com.example.fylmr.ya_gallery.R
 import com.example.fylmr.ya_gallery.entities.Picture
 import com.example.fylmr.ya_gallery.presenters.SinglePhotoPresenter
 import com.example.fylmr.ya_gallery.views.SinglePhotoView
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_single_photo.*
 
 class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
+    val TAG = "SinglePhotoActivity"
 
     @InjectPresenter
     lateinit var singlePhotoPresenter: SinglePhotoPresenter
@@ -31,33 +31,33 @@ class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
         singlePhotoPresenter.handlePicFromIntent(pic)
     }
 
-    override fun showPicture(url: String) {
-        single_photo_pb.visibility = View.VISIBLE
-        Picasso.with(this)
-                .load(url)
-                .into(single_photo_imgview, object : Callback {
-                    override fun onSuccess() {
-                        single_photo_pb.visibility = View.GONE
-                    }
+    override fun showPicture(bmp: Bitmap) {
+        Log.v(TAG, "showPicture(bmp)")
 
-                    override fun onError() {}
-                })
+        single_photo_imgview.setImageBitmap(bmp)
 
         if (!fullPictureSet)
             askFullPicture()
     }
 
-    override fun showFullPicture(url: String) {
+
+    override fun showFullPicture(bmp: Bitmap) {
+        Log.v(TAG, "showFullPicture(bmp)")
+
         fullPictureSet = true
 
-        showPicture(url)
+        showPicture(bmp)
     }
 
     fun askFullPicture() {
         singlePhotoPresenter.askFullPicture()
     }
 
-    override fun showPicture(bmp: Bitmap) {
-        single_photo_imgview.setImageBitmap(bmp)
+    fun showLoading() {
+        single_photo_pb.visibility = View.VISIBLE
+    }
+
+    fun hideLoading() {
+        single_photo_pb.visibility = View.GONE
     }
 }

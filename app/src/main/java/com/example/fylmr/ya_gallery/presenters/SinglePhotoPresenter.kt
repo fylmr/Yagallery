@@ -31,7 +31,7 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
     }
 
     /**
-     *   Get activity context from activity.
+     *   Set activity context to the presenter context field
      *   @throws NullPointerException when context is null
      *   @throws ClassCastException when context is not Activity context (application context for example)
      **/
@@ -50,6 +50,9 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
         }
     }
 
+    /**
+     * A [passPicToActivity] wrapper method.
+     */
     fun handlePicFromIntent(pic: Picture?) {
         try {
             passPicToActivity(pic)
@@ -68,38 +71,44 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
             throw NullPointerException("Picture is null")
         }
 
-        this.pic = pic
 
-        if (pic.bmp != null) {
-            Log.v(TAG, "Setting thorugh bmp")
+        if (pic.bmp == null) {
+            pic.makeBmp(context, { bmp ->
+                if (bmp != null) {
+                    passPicToActivity(pic)
 
+                } else {
+                    Log.e(TAG, "passPicToActivity couldn't make Bitmap")
+                    //todo
+                }
+            })
+        } else {
             viewState.showPicture(pic.bmp!!)
-
-        } else if (pic.url != null) {
-            Log.v(TAG, "Setting through url")
-
-            viewState.showPicture(pic.url!!)
-
+            pic.saveToCache(context)
         }
+
+        this.pic = pic
 
     }
 
     /**
-     * Gets full size picture when the small one is finished loading
+     * Gets full size picture.
      */
     fun askFullPicture() {
         Log.v(TAG, "askFullPicture()")
-
-        Log.d(TAG, pic.toString())
 
         VKPicsModel().getHighResPictureByID(
                 pic.photo_id!!,
                 pic.owner_id!!,
                 "",
                 { pic ->
-                    viewState.showFullPicture(pic.url!!)
-
-                    this.pic = pic
+                    pic.makeBmp(context) { bmp ->
+                        if (bmp != null) {
+                            viewState.showFullPicture(bmp)
+                            pic.saveToCache(context)
+                            this.pic = pic
+                        }
+                    }
                 },
                 { error ->
                     Log.e(TAG, "getHighResPictureByID failed with error: $error")

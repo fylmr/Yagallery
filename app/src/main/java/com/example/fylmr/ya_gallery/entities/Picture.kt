@@ -52,7 +52,7 @@ class Picture() : Parcelable {
     }
 
     fun saveToCache(context: Context) {
-        Log.v("Picture", "writeToCache()")
+        Log.v("Picture", "saveToCache()")
 
         if (bmp == null)
             makeBmp(context) {
@@ -63,7 +63,7 @@ class Picture() : Parcelable {
             saveImageToInternalStorage(context, bmp!!)
     }
 
-    fun makeBmp(context: Context, onFinish: () -> Unit) {
+    fun makeBmp(context: Context, onFinish: (bmp: Bitmap?) -> Unit) {
         Log.v("Picture", "makeBmp()")
 
         Picasso.with(context)
@@ -77,8 +77,9 @@ class Picture() : Parcelable {
                     }
 
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                        Log.v("Picture", "onBitmapLoaded")
                         bmp = bitmap
-                        onFinish()
+                        onFinish(bitmap)
                     }
                 })
     }
