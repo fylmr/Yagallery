@@ -9,4 +9,7 @@ interface SinglePhotoView : MvpView {
 
     //    fun showFullPicture(url: String)
     fun showFullPicture(bmp: Bitmap)
+
+    fun showLoading()
+    fun hideLoading()
 }

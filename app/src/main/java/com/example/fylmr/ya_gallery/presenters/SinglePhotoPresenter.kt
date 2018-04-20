@@ -71,7 +71,7 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
             throw NullPointerException("Picture is null")
         }
 
-
+        viewState.showLoading()
         if (pic.bmp == null) {
             pic.makeBmp(context, { bmp ->
                 if (bmp != null) {
@@ -87,6 +87,7 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
             pic.saveToCache(context)
         }
 
+        viewState.hideLoading()
         this.pic = pic
 
     }
@@ -102,10 +103,16 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
                 pic.owner_id!!,
                 "",
                 { pic ->
+                    //todo Возможно, проблема где-то здесь, он обновляет не эту картинку, а скачанную
+                    viewState.showLoading()
+
                     pic.makeBmp(context) { bmp ->
                         if (bmp != null) {
                             viewState.showFullPicture(bmp)
+                            viewState.hideLoading()
+
                             pic.saveToCache(context)
+
                             this.pic = pic
                         }
                     }

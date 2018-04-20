@@ -53,11 +53,15 @@ class SinglePhotoActivity : MvpAppCompatActivity(), SinglePhotoView {
         singlePhotoPresenter.askFullPicture()
     }
 
-    fun showLoading() {
+    override fun showLoading() {
+        Log.v(TAG, "showLoading()")
+
         single_photo_pb.visibility = View.VISIBLE
     }
 
-    fun hideLoading() {
+    override fun hideLoading() {
+        Log.v(TAG, "hideLoading()")
+
         single_photo_pb.visibility = View.GONE
     }
 }
