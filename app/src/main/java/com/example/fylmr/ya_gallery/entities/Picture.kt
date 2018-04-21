@@ -20,6 +20,8 @@ class Picture() : Parcelable {
 
     var bmp: Bitmap? = null
 
+    var protectedFromGarbageCollectorTargets = HashSet<Target>()
+
     constructor(parcel: Parcel) : this() {
         url = parcel.readString()
         photo_id = parcel.readString()
@@ -66,22 +68,29 @@ class Picture() : Parcelable {
     fun makeBmp(context: Context, onFinish: (bmp: Bitmap?) -> Unit) {
         Log.v("Picture", "makeBmp()")
 
+        val target = object : Target {
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                Log.v("Picture", "onPrepareLoad")
+            }
+
+            override fun onBitmapFailed(errorDrawable: Drawable?) {
+                Log.w("Picture", "onBitmapFailed ${errorDrawable.toString()}")
+            }
+
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                Log.v("Picture", "onBitmapLoaded")
+                bmp = bitmap
+                onFinish(bitmap)
+            }
+        }
+
+        protectedFromGarbageCollectorTargets.add(target)
+
         Picasso.with(context)
                 .load(url)
-                .into(object : Target {
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    }
+                .into(target)
 
-                    override fun onBitmapFailed(errorDrawable: Drawable?) {
-                        Log.w("Picture", "onBitmapFailed ${errorDrawable.toString()}")
-                    }
 
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        Log.v("Picture", "onBitmapLoaded")
-                        bmp = bitmap
-                        onFinish(bitmap)
-                    }
-                })
     }
 
     private fun saveImageToInternalStorage(context: Context, image: Bitmap): Boolean {

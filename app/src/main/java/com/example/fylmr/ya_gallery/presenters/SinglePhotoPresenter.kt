@@ -104,23 +104,36 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
                 "",
                 { pic ->
                     //todo Возможно, проблема где-то здесь, он обновляет не эту картинку, а скачанную
-                    viewState.showLoading()
 
-                    pic.makeBmp(context) { bmp ->
-                        if (bmp != null) {
-                            viewState.showFullPicture(bmp)
-                            viewState.hideLoading()
 
-                            pic.saveToCache(context)
-
-                            this.pic = pic
-                        }
-                    }
+                    showFullPicture(pic)
                 },
                 { error ->
                     Log.e(TAG, "getHighResPictureByID failed with error: $error")
                 }
         )
+    }
+
+    private fun showFullPicture(pic: Picture) {
+        viewState.showLoading()
+
+        this.pic = pic
+
+        this.pic.makeBmp(context) { bmp ->
+
+            if (bmp != null) {
+                Log.v(TAG, "bmp is not null")
+
+                viewState.showFullPicture(this.pic.bmp!!)
+                viewState.hideLoading()
+
+                pic.saveToCache(context)
+
+
+            } else {
+                Log.v(TAG, "bmp is null")
+            }
+        }
     }
 
 
