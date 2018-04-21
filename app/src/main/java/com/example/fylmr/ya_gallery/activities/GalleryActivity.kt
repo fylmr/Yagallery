@@ -47,13 +47,20 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         galleryPresenter.start(applicationContext)
     }
 
+    /**
+     * Initialize recycler view with selected spans and adapter initialized above.
+     */
     private fun initializeRecyclerView() {
-        /*Initialize recycler view with selected spans and adapter initialized above*/
 
         gallery_rv.layoutManager = GridLayoutManager(applicationContext, spans)
         gallery_rv.adapter = galleryAdapter
     }
 
+    /**
+     * Replaces currect [pics] MutableList with given [pics] parameter.
+     *
+     * @param pics MutableList of [Picture]s.
+     */
     override fun populateGallery(pics: MutableList<Picture>) {
         this.pics.clear()
         this.pics.addAll(pics)

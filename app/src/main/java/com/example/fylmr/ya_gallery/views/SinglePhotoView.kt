@@ -4,12 +4,25 @@ import android.graphics.Bitmap
 import com.arellomobile.mvp.MvpView
 
 interface SinglePhotoView : MvpView {
-    //    fun showPicture(url: String)
+    /**
+     * Shows the picture.
+     *
+     * @param bmp [Bitmap] of the picture
+     */
     fun showPicture(bmp: Bitmap)
 
-    //    fun showFullPicture(url: String)
+    /**
+     * Shows provided picture and also sets fullPictureSet flag to true.
+     */
     fun showFullPicture(bmp: Bitmap)
 
+    /**
+     * Shows loader icon.
+     */
     fun showLoading()
+
+    /**
+     * Hides loader icon.
+     */
     fun hideLoading()
 }

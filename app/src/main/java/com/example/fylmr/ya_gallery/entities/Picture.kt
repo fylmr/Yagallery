@@ -9,17 +9,26 @@ import android.util.Log
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
+/**
+ * VK Picture class.
+ * Contains url to it, it's photoId, ownerId, albumId [String]s.
+ */
 class Picture() : Parcelable {
+    val TAG = "Picture"
 
     var url: String? = null
-    // todo Добавить ЮРЛ большой картинки и юрл маленькой отдельно
 
     var photo_id: String? = null
     var owner_id: String? = null
+
+    @Deprecated("Unused")
     var album_id: String? = null
 
     var bmp: Bitmap? = null
 
+    /**
+     * Otherwise the target would be garbage collected.
+     */
     var protectedFromGarbageCollectorTargets = HashSet<Target>()
 
     constructor(parcel: Parcel) : this() {
@@ -37,24 +46,12 @@ class Picture() : Parcelable {
                 "Album ID: $album_id \n"
     }
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        if (dest != null) {
-            dest.writeString(url)
-
-            dest.writeString(photo_id)
-            dest.writeString(owner_id)
-            dest.writeString(album_id)
-
-            dest.writeParcelable(bmp, 1)
-        }
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
+    /**
+     * Saves picture to storage.
+     * @param context is used to save to internal storage
+     */
     fun saveToCache(context: Context) {
-        Log.v("Picture", "saveToCache()")
+        Log.v(TAG, "saveToCache()")
 
         if (bmp == null)
             makeBmp(context) {
@@ -65,49 +62,74 @@ class Picture() : Parcelable {
             saveImageToInternalStorage(context, bmp!!)
     }
 
+    /**
+     * Downloads picture from [url] field to [bmp] field.
+     * Also sends the downloaded bmp with [onFinish].
+     *
+     * @param context
+     * @param onFinish callback with nullable [bmp]
+     */
     fun makeBmp(context: Context, onFinish: (bmp: Bitmap?) -> Unit) {
-        Log.v("Picture", "makeBmp()")
+        Log.v(TAG, "makeBmp()")
 
         val target = object : Target {
             override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                Log.v("Picture", "onPrepareLoad")
+                Log.v(TAG, "onPrepareLoad")
             }
 
             override fun onBitmapFailed(errorDrawable: Drawable?) {
-                Log.w("Picture", "onBitmapFailed ${errorDrawable.toString()}")
+                Log.w(TAG, "onBitmapFailed ${errorDrawable.toString()}")
             }
 
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                Log.v("Picture", "onBitmapLoaded")
+                Log.v(TAG, "onBitmapLoaded")
+
                 bmp = bitmap
                 onFinish(bitmap)
             }
         }
 
+        // Used to trick garbage collector
         protectedFromGarbageCollectorTargets.add(target)
 
         Picasso.with(context)
                 .load(url)
                 .into(target)
-
-
     }
 
+    /**
+     * Saves image to internal storage.
+     * Filename format: ownerId_photoId.jpg
+     * @param context [Context]
+     * @param image [Bitmap]
+     */
     private fun saveImageToInternalStorage(context: Context, image: Bitmap): Boolean {
-        Log.v("Picture", "saveImageToIntStorage")
+        Log.v(TAG, "saveImageToIntStorage")
 
         try {
-            val fos = context.openFileOutput("${owner_id}_${photo_id}", Context.MODE_PRIVATE)
+            val fos = context.openFileOutput("${owner_id}_${photo_id}.jpg", Context.MODE_PRIVATE)
 
-            image.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            image.compress(Bitmap.CompressFormat.JPEG, 100, fos)
             fos.close()
 
             return true
         } catch (e: Exception) {
-            Log.e("Picture", "saveImageToIntStorage error: ${e.message}")
+            Log.e(TAG, "saveImageToIntStorage error: ${e.message}")
             return false
         }
 
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(url)
+        parcel.writeString(photo_id)
+        parcel.writeString(owner_id)
+        parcel.writeString(album_id)
+        parcel.writeParcelable(bmp, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
     }
 
     companion object CREATOR : Parcelable.Creator<Picture> {

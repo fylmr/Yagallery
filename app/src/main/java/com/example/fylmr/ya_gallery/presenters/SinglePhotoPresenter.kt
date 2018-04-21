@@ -103,9 +103,6 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
                 pic.owner_id!!,
                 "",
                 { pic ->
-                    //todo Возможно, проблема где-то здесь, он обновляет не эту картинку, а скачанную
-
-
                     showFullPicture(pic)
                 },
                 { error ->
@@ -114,6 +111,9 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
         )
     }
 
+    /**
+     * Makes bitmap of downloaded picture and sends it to activity.
+     */
     private fun showFullPicture(pic: Picture) {
         viewState.showLoading()
 
@@ -131,7 +131,7 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
 
 
             } else {
-                Log.v(TAG, "bmp is null")
+                Log.e(TAG, "bmp is null")
             }
         }
     }
