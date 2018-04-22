@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_gallery.*
 
 
 class GalleryActivity : MvpAppCompatActivity(), GalleryView {
+    val TAG = "GalleryActivity"
 
     @InjectPresenter
     lateinit var galleryPresenter: GalleryPresenter
@@ -53,6 +55,9 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         // Initializing Pictures RecyclerView
         galleryAdapter = GalleryAdapter(this, pics)
         initializeRecyclerView()
+
+        // Detect if recyclerview reaches it's end
+        gallery_rv.addOnScrollListener(GalleryEndChecker())
 
         // Passing context to presenter
         galleryPresenter.start(applicationContext)
@@ -97,6 +102,12 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         this.galleryAdapter.notifyDataSetChanged()
     }
 
+    override fun addToGallery(pics: MutableList<Picture>) {
+        this.pics.addAll(pics)
+
+        this.galleryAdapter.notifyDataSetChanged()
+    }
+
     /**
      * Called when photo is clicked in [GalleryAdapter].
      *
@@ -107,16 +118,29 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
     }
 
     /**
-     * Opens activity with selected request code
+     * Opens activity with selected request code.
      *
      * @param intent Intent that should be opened for result
      * @param requestCode Integer showing request code
      */
     override fun openActivityForResult(intent: Intent, requestCode: Int?) {
         if (requestCode == null)
-        startActivityForResult(intent, Constants.RequestCodes.OPEN_PHOTO_FULL_SCREEN)
+            startActivityForResult(intent, Constants.RequestCodes.OPEN_PHOTO_FULL_SCREEN)
         else
             startActivityForResult(intent, requestCode)
+
+    }
+
+    /**
+     * Checks for gallery end reached and calls corresponding [galleryPresenter] method.
+     */
+    inner class GalleryEndChecker : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && !gallery_rv.canScrollVertically(1))
+                galleryPresenter.galleryEndReached()
+        }
 
     }
 }

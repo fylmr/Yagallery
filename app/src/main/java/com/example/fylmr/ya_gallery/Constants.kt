@@ -6,6 +6,8 @@ class Constants {
         companion object {
             const val PHOTOS_GET_ALL = "photos.getAll"
             const val PHOTOS_GET_BY_ID = "photos.getById"
+
+            const val DEFAULT_PHOTO_COUNT = 20
         }
 
 

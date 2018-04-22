@@ -8,6 +8,7 @@ import com.example.fylmr.ya_gallery.entities.Picture
 
 interface GalleryView : MvpView {
     fun populateGallery(pics: MutableList<Picture>)
+    fun addToGallery(pics: MutableList<Picture>)
 
     @StateStrategyType(SkipStrategy::class)
     fun photoClicked(picture: Picture)

@@ -118,7 +118,7 @@ class VKPicsModel {
 
         val request = VKRequest(Constants.VKMethods.PHOTOS_GET_ALL,
                 VKParameters.from(
-                        VKApiConst.COUNT, count ?: 20,
+                        VKApiConst.COUNT, count ?: Constants.VKMethods.DEFAULT_PHOTO_COUNT,
                         VKApiConst.OFFSET, offset ?: 0))
 
         Log.v(TAG, "Request: ${request.toString()}")

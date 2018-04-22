@@ -25,6 +25,8 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
 
     val vkPicsModel = VKPicsModel()
 
+    var pagesDownloaded = 0
+
     /**
      * When activity is created, it passes it's [Context] to presenter
      * and starts [populateGallery]
@@ -50,6 +52,8 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
     private fun populateGallery() {
         vkPicsModel.getFirstCurrentUserPictures({
             viewState.populateGallery(it)
+
+            this.pagesDownloaded += 1
         }, {
             Toast.makeText(
                     applicationContext,
@@ -83,6 +87,28 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
             val toMainActivityIntent = Intent(applicationContext, MainActivity::class.java)
             applicationContext!!.startActivity(toMainActivityIntent)
         }
+    }
+
+    /**
+     *
+     */
+    fun galleryEndReached() {
+        vkPicsModel.getCurrentUserPictures(null,
+                Constants.VKMethods.DEFAULT_PHOTO_COUNT * this.pagesDownloaded,
+                { downloadedPics ->
+                    viewState.addToGallery(downloadedPics)
+                    this.pagesDownloaded++
+                },
+                { errorString ->
+                    Toast.makeText(
+                            applicationContext,
+                            "Please check your internet connection and try again.",
+                            Toast.LENGTH_SHORT
+                    ).show()
+
+                    Log.e(TAG, "Error adding photos to gallery. Error + $errorString")
+                }
+        )
     }
 
 }
