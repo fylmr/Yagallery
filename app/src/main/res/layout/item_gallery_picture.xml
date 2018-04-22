@@ -9,8 +9,8 @@
     <ImageView
         android:id="@+id/gallery_picture_imageview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minHeight="@dimen/gallery_height"
+        android:layout_height="@dimen/gallery_height"
+        android:contentDescription="@string/gallery_item"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
