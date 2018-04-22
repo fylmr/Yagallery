@@ -7,7 +7,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.example.fylmr.ya_gallery.entities.Picture
 
 interface GalleryView : MvpView {
-    fun populateGallery(pics: MutableList<Picture>)
+    //    fun populateGallery(pics: MutableList<Picture>)
     fun addToGallery(pics: MutableList<Picture>)
 
     @StateStrategyType(SkipStrategy::class)

@@ -71,13 +71,13 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        return when (item.getItemId()) {
             R.id.logout_menu_item -> {
                 galleryPresenter.logout()
 
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -85,23 +85,16 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
      * Initialize recycler view with selected spans and adapter initialized above.
      */
     private fun initializeRecyclerView() {
-
         gallery_rv.layoutManager = GridLayoutManager(applicationContext, spans)
         gallery_rv.adapter = galleryAdapter
     }
 
+
     /**
-     * Replaces currect [pics] MutableList with given [pics] parameter.
+     * Fills currect [pics] MutableList with given [pics].
      *
      * @param pics MutableList of [Picture]s.
      */
-    override fun populateGallery(pics: MutableList<Picture>) {
-        this.pics.clear()
-        this.pics.addAll(pics)
-
-        this.galleryAdapter.notifyDataSetChanged()
-    }
-
     override fun addToGallery(pics: MutableList<Picture>) {
         this.pics.addAll(pics)
 
@@ -139,7 +132,7 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
             super.onScrollStateChanged(recyclerView, newState)
 
             if (newState == RecyclerView.SCROLL_STATE_IDLE && !gallery_rv.canScrollVertically(1))
-                galleryPresenter.galleryEndReached()
+                galleryPresenter.addPhotosToGallery()
         }
 
     }

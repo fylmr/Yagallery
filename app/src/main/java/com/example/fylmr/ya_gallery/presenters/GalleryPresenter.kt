@@ -25,16 +25,17 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
 
     val vkPicsModel = VKPicsModel()
 
+    /**
+     * How many pages of pictures are in gallery.
+     */
     var pagesDownloaded = 0
 
     /**
      * When activity is created, it passes it's [Context] to presenter
-     * and starts [populateGallery]
+     * and starts [addPhotosToGallery]
      */
     @Throws(NullPointerException::class)
     fun start(context: Context?) {
-
-
         Log.d(TAG, "start()")
 
         if (context != null) {
@@ -43,17 +44,19 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
             throw NullPointerException("Passed application context is null")
         }
 
-        populateGallery()
+        addPhotosToGallery()
     }
 
     /**
      * Fill gallery with photos.
      */
-    private fun populateGallery() {
-        vkPicsModel.getFirstCurrentUserPictures({
-            viewState.populateGallery(it)
+    fun addPhotosToGallery() {
+        val offset = Constants.VKMethods.DEFAULT_PHOTO_COUNT * this.pagesDownloaded
+        vkPicsModel.getCurrentUserPictures(null, offset, {
 
+            viewState.addToGallery(it)
             this.pagesDownloaded += 1
+
         }, {
             Toast.makeText(
                     applicationContext,
@@ -88,27 +91,4 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
             applicationContext!!.startActivity(toMainActivityIntent)
         }
     }
-
-    /**
-     *
-     */
-    fun galleryEndReached() {
-        vkPicsModel.getCurrentUserPictures(null,
-                Constants.VKMethods.DEFAULT_PHOTO_COUNT * this.pagesDownloaded,
-                { downloadedPics ->
-                    viewState.addToGallery(downloadedPics)
-                    this.pagesDownloaded++
-                },
-                { errorString ->
-                    Toast.makeText(
-                            applicationContext,
-                            "Please check your internet connection and try again.",
-                            Toast.LENGTH_SHORT
-                    ).show()
-
-                    Log.e(TAG, "Error adding photos to gallery. Error + $errorString")
-                }
-        )
-    }
-
 }
