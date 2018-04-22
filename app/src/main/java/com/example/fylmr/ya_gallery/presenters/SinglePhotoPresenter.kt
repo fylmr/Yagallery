@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import com.example.fylmr.ya_gallery.FileUtilities
 import com.example.fylmr.ya_gallery.entities.Picture
 import com.example.fylmr.ya_gallery.models.VKPicsModel
 import com.example.fylmr.ya_gallery.views.SinglePhotoView
@@ -18,7 +19,7 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
     lateinit var pic: Picture
 
     /**
-     * Starts the [SinglePhotoPresenter]
+     * Starts the [SinglePhotoPresenter].
      */
     fun start(context: Context?) {
         try {
@@ -31,7 +32,8 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
     }
 
     /**
-     *   Set activity context to the presenter context field
+     *   Set activity context to the presenter context field.
+     *
      *   @throws NullPointerException when context is null
      *   @throws ClassCastException when context is not Activity context (application context for example)
      **/
@@ -62,7 +64,8 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
     }
 
     /**
-     * Checks for common errors and passes picture to activity
+     * Checks for common errors and passes picture to activity.
+     *
      * @throws NullPointerException when picture is null
      */
     @Throws(NullPointerException::class)
@@ -84,7 +87,7 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
             })
         } else {
             viewState.showPicture(pic.bmp!!)
-            pic.saveToCache(context)
+//            pic.saveToCache(context)
         }
 
         viewState.hideLoading()
@@ -98,17 +101,31 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
     fun askFullPicture() {
         Log.v(TAG, "askFullPicture()")
 
-        VKPicsModel().getHighResPictureByID(
-                pic.photo_id!!,
-                pic.owner_id!!,
-                "",
-                { pic ->
-                    showFullPicture(pic)
-                },
-                { error ->
-                    Log.e(TAG, "getHighResPictureByID failed with error: $error")
-                }
-        )
+        val picFileName = this.pic.owner_id + "_" + this.pic.photo_id + ".jpg"
+        val thumbnail = FileUtilities().getThumbnailFromInternalStorage(context, picFileName)
+
+        if (thumbnail != null) {
+            Log.v(TAG, "askFullPicture thumbnail isn't null")
+
+            viewState.showLoading()
+            viewState.showFullPicture(thumbnail)
+            Log.v(TAG, thumbnail.width.toString() + thumbnail.height.toString())
+            viewState.hideLoading()
+        } else {
+            Log.v(TAG, "askFullPicture thumbnail is null")
+
+            VKPicsModel().getHighResPictureByID(
+                    pic.photo_id!!,
+                    pic.owner_id!!,
+                    "",
+                    { pic ->
+                        showFullPicture(pic)
+                    },
+                    { error ->
+                        Log.e(TAG, "getHighResPictureByID failed with error: $error")
+                    }
+            )
+        }
     }
 
     /**
