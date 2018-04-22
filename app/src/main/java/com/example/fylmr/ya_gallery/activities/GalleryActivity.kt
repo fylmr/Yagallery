@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.example.fylmr.ya_gallery.Constants
@@ -15,16 +17,25 @@ import com.example.fylmr.ya_gallery.presenters.GalleryPresenter
 import com.example.fylmr.ya_gallery.views.GalleryView
 import kotlinx.android.synthetic.main.activity_gallery.*
 
+
 class GalleryActivity : MvpAppCompatActivity(), GalleryView {
 
     @InjectPresenter
     lateinit var galleryPresenter: GalleryPresenter
 
-    //App preferences
+    /**
+     * App preferences
+     */
     lateinit var sharedPref: SharedPreferences
 
-    // Photos list and adapter for it
+    /**
+     *  Photos mutable list.
+     */
     private var pics = mutableListOf<Picture>()
+
+    /**
+     * Adapter for [pics] mutable list.
+     */
     private lateinit var galleryAdapter: GalleryAdapter
 
     //Span count in gallery
@@ -45,6 +56,24 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
 
         // Passing context to presenter
         galleryPresenter.start(applicationContext)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuInflater = getMenuInflater()
+        menuInflater.inflate(R.menu.smpl_logout_menu, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            R.id.logout_menu_item -> {
+                galleryPresenter.logout()
+
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     /**
@@ -68,11 +97,26 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         this.galleryAdapter.notifyDataSetChanged()
     }
 
+    /**
+     * Called when photo is clicked in [GalleryAdapter].
+     *
+     * @param picture Clicked picture
+     */
     override fun photoClicked(picture: Picture) {
         galleryPresenter.openPhoto(picture)
     }
 
-    override fun openActivityForResult(intent: Intent) {
+    /**
+     * Opens activity with selected request code
+     *
+     * @param intent Intent that should be opened for result
+     * @param requestCode Integer showing request code
+     */
+    override fun openActivityForResult(intent: Intent, requestCode: Int?) {
+        if (requestCode == null)
         startActivityForResult(intent, Constants.RequestCodes.OPEN_PHOTO_FULL_SCREEN)
+        else
+            startActivityForResult(intent, requestCode)
+
     }
 }
