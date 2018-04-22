@@ -25,7 +25,9 @@
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
-        <activity android:name=".activities.SinglePhotoActivity"></activity>
+        <activity
+            android:name=".activities.SinglePhotoActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>
