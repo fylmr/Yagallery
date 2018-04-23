@@ -1,8 +1,6 @@
 package com.example.fylmr.ya_gallery.activities
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -25,10 +23,10 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
     @InjectPresenter
     lateinit var galleryPresenter: GalleryPresenter
 
-    /**
-     * App preferences
-     */
-    lateinit var sharedPref: SharedPreferences
+//    /**
+//     * App preferences
+//     */
+//    lateinit var sharedPref: SharedPreferences
 
     /**
      *  Photos mutable list.
@@ -48,9 +46,9 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-        // Setting spans preferences
-        sharedPref = getPreferences(Context.MODE_PRIVATE)
-        spans = sharedPref.getInt(getString(R.string.saved_gallery_spans_key), spans)
+//        // Setting spans preferences
+//        sharedPref = getPreferences(Context.MODE_PRIVATE)
+//        spans = sharedPref.getInt(getString(R.string.saved_gallery_spans_key), spans)
 
         // Initializing Pictures RecyclerView
         galleryAdapter = GalleryAdapter(this, pics)
