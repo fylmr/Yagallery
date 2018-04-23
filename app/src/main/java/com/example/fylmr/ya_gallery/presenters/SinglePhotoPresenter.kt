@@ -82,7 +82,6 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
 
                 } else {
                     Log.e(TAG, "passPicToActivity couldn't make Bitmap")
-                    //todo
                 }
             })
         } else {

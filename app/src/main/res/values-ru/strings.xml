@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Ya-gallery</string>
+    <string name="app_name">Я-галерея</string>
     <string name="yandex_auth_title">Авторизация через Яндекс</string>
     <string name="yandex_auth_msg">Пожалуйста, залогиньтесь</string>
     <string name="yandex_auth_positive_btn">Войти</string>
     <string name="cancel">Отменить</string>
     <string name="login_vk">Войти через ВК</string>
     <string name="vk_login_prompt">Чтобы посмотреть фотографии, пожалуйста, войдите в ВК</string>
+    <string name="logout">Выйти из ВК</string>
+    <string name="gallery_item">Элемент галереии</string>
+    <string name="connection_lost">Пожалуйста, проверьте соединение с Интернетом.</string>
 </resources>

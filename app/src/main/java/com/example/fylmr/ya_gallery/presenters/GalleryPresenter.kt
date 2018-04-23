@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.example.fylmr.ya_gallery.Constants
+import com.example.fylmr.ya_gallery.R
 import com.example.fylmr.ya_gallery.activities.MainActivity
 import com.example.fylmr.ya_gallery.activities.SinglePhotoActivity
 import com.example.fylmr.ya_gallery.entities.Picture
@@ -60,7 +61,7 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
         }, {
             Toast.makeText(
                     applicationContext,
-                    "Please check your internet connection and try again.",
+                    applicationContext!!.getString(R.string.connection_lost),
                     Toast.LENGTH_SHORT
             ).show()
 

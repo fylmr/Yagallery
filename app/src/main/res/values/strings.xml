@@ -13,4 +13,5 @@
     <string name="vk_login_prompt">Please log in through VK to see your photos</string>
     <string name="logout">Logout</string>
     <string name="gallery_item">Gallery item</string>
+    <string name="connection_lost">Please check your Internet connection and try again.</string>
 </resources>
