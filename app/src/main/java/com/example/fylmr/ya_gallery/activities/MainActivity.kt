@@ -56,6 +56,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLoginError(error: VKError) {
         Log.e(TAG, "VK Login error")
-        Toast.makeText(applicationContext, error.errorMessage, Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, resources.getString(R.string.vk_login_error), Toast.LENGTH_SHORT).show()
     }
 }

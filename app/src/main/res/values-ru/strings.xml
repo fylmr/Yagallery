@@ -10,4 +10,6 @@
     <string name="logout">Выйти из ВК</string>
     <string name="gallery_item">Элемент галереии</string>
     <string name="connection_lost">Пожалуйста, проверьте соединение с Интернетом.</string>
+    <string name="user_is_not_logged_in">Вы не вошли во ВКонтакте</string>
+    <string name="vk_login_error">Ошибка входа ВК</string>
 </resources>
