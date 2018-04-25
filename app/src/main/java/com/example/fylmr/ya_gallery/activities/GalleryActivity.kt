@@ -14,6 +14,7 @@ import com.example.fylmr.ya_gallery.adapters.GalleryAdapter
 import com.example.fylmr.ya_gallery.entities.Picture
 import com.example.fylmr.ya_gallery.presenters.GalleryPresenter
 import com.example.fylmr.ya_gallery.views.GalleryView
+import com.vk.sdk.VKSdk
 import kotlinx.android.synthetic.main.activity_gallery.*
 
 
@@ -46,9 +47,9 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-//        // Setting spans preferences
-//        sharedPref = getPreferences(Context.MODE_PRIVATE)
-//        spans = sharedPref.getInt(getString(R.string.saved_gallery_spans_key), spans)
+        // If user is not logged in, take them back to login.
+        if (!VKSdk.isLoggedIn())
+            openActivity(Intent(this, MainActivity::class.java))
 
         // Initializing Pictures RecyclerView
         galleryAdapter = GalleryAdapter(this, pics)
@@ -120,6 +121,10 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         else
             startActivityForResult(intent, requestCode)
 
+    }
+
+    override fun openActivity(intent: Intent) {
+        startActivity(intent)
     }
 
     /**

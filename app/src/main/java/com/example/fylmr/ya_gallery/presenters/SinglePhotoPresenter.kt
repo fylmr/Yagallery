@@ -86,7 +86,6 @@ class SinglePhotoPresenter : MvpPresenter<SinglePhotoView>() {
             })
         } else {
             viewState.showPicture(pic.bmp!!)
-//            pic.saveToCache(context)
         }
 
         viewState.hideLoading()

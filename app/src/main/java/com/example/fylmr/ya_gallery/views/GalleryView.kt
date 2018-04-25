@@ -15,4 +15,7 @@ interface GalleryView : MvpView {
 
     @StateStrategyType(SkipStrategy::class)
     fun openActivityForResult(intent: Intent, requestCode: Int? = null)
+
+    @StateStrategyType(SkipStrategy::class)
+    fun openActivity(intent: Intent)
 }
