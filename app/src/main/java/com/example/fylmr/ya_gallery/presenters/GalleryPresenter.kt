@@ -41,6 +41,11 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
 
         if (context != null) {
             this.applicationContext = context
+
+            // If user is not logged in, take them back to login.
+            if (!VKSdk.isLoggedIn())
+                viewState.openActivity(Intent(applicationContext,
+                        MainActivity::class.java))
         } else {
             throw NullPointerException("Passed application context is null")
         }
@@ -59,11 +64,19 @@ class GalleryPresenter : MvpPresenter<GalleryView>() {
             this.pagesDownloaded += 1
 
         }, {
-            Toast.makeText(
-                    applicationContext,
-                    applicationContext!!.getString(R.string.connection_lost),
-                    Toast.LENGTH_SHORT
-            ).show()
+            if (VKSdk.isLoggedIn())
+                Toast.makeText(
+                        applicationContext,
+                        applicationContext!!.getString(R.string.connection_lost),
+                        Toast.LENGTH_SHORT
+                ).show()
+            else {
+                Toast.makeText(
+                        applicationContext,
+                        applicationContext!!.getString(R.string.user_is_not_logged_in),
+                        Toast.LENGTH_SHORT
+                ).show()
+            }
 
             Log.e(TAG, "Error populating gallery")
         })

@@ -14,7 +14,6 @@ import com.example.fylmr.ya_gallery.adapters.GalleryAdapter
 import com.example.fylmr.ya_gallery.entities.Picture
 import com.example.fylmr.ya_gallery.presenters.GalleryPresenter
 import com.example.fylmr.ya_gallery.views.GalleryView
-import com.vk.sdk.VKSdk
 import kotlinx.android.synthetic.main.activity_gallery.*
 
 
@@ -24,10 +23,6 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
     @InjectPresenter
     lateinit var galleryPresenter: GalleryPresenter
 
-//    /**
-//     * App preferences
-//     */
-//    lateinit var sharedPref: SharedPreferences
 
     /**
      *  Photos mutable list.
@@ -47,9 +42,6 @@ class GalleryActivity : MvpAppCompatActivity(), GalleryView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-        // If user is not logged in, take them back to login.
-        if (!VKSdk.isLoggedIn())
-            openActivity(Intent(this, MainActivity::class.java))
 
         // Initializing Pictures RecyclerView
         galleryAdapter = GalleryAdapter(this, pics)
